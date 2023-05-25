@@ -1,0 +1,36 @@
+/**Clothing:
+Jackets sizes S M L XL ($20)
+Dresses sizes S M L ($30)
+Jeans sizes S M L ($45)
+Tshirts sizes S M L XL ($15)
+Skirts sizes S M L ($25)
+Button Ups sizes S M L XL ($30) 
+Coats sizes S M L XL ($65)
+**/
+
+CREATE TABLE Clothing ( id INTEGER PRIMARY KEY, name TEXT, color TEXT, prices INTEGER, size TEXT, quantity INTEGER );
+ INSERT INTO CLothing VALUES (1, "Jackets", "black", 20, "S", 4);
+ INSERT INTO Clothing VALUES (2, "Jackets", "black", 20, "M", 5);
+ INSERT INTO Clothing VALUES (3, "Jackets", "black", 20, "L", 3);
+ INSERT INTO Clothing VALUES (4, "Dresses", "blue", 30, "S", 6);
+ INSERT INTO Clothing VALUES (5, "Dresses", "blue", 30, "M", 3);
+ INSERT INTO Clothing VALUES (6, "Dresses", "blue", 30, "L", 8);
+ INSERT INTO Clothing VALUES (7, "Jeans", "black", 45, "S", 3);
+ INSERT INTO Clothing VALUES (8, "Jeans", "black", 45, "M", 4);
+ INSERT INTO CLothing VALUES (9, "Jeans", "black", 45, "L", 7);
+ INSERT INTO Clothing VALUES (10, "TShirts", "white", 15, "S", 7);
+ INSERT INTO Clothing VALUES (11, "TShirts", "white", 15, "M", 4);
+ INSERT INTO Clothing VALUES (12, "TShirts", "white", 15, "L", 5);
+ INSERT INTO Clothing VALUES (13, "Skirts", "pink", 25, "S", 4);
+ INSERT INTO Clothing VALUES (14, "Skirts", "pink", 25, "M", 6);
+ INSERT INTO Clothing VALUES (15, "Skirts", "pink", 25, "L", 5);
+ 
+ 
+--display the database ordered by prices 
+SELECT * FROM Clothing ORDER BY prices;
+
+-- how many of each item are there total? 
+SELECT name, SUM(quantity) FROM Clothing GROUP BY name
+
+--how to find which items need to be restocked? 
+SELECT name, size, quantity FROM Clothing Order BY quantity;
