@@ -1,0 +1,57 @@
+#For this project I used a data base containing different stats about marvel characters and answering questions about the data. 
+
+
+CREATE TABLE marvels (ID INTEGER PRIMARY KEY,
+    name TEXT,
+    popularity INTEGER,
+    alignment TEXT,
+    gender TEXT, 
+    height_m NUMERIC,
+    weight_kg NUMERIC,
+    hometown TEXT,
+    intelligence INTEGER,
+    strength INTEGER,
+    speed INTEGER,
+    durability INTEGER,
+    energy_Projection INTEGER,
+    fighting_Skills INTEGER);
+  
+
+-- what are the average, min, and max speeds from the data? 
+SELECT AVG(speed) FROM marvels;
+SELECT MIN(speed) FROM marvels;
+SELECT MAX(speed) FROM marvels;
+
+--which hometowns have an average speed greater than 4? 
+SELECT hometown, AVG(speed) AS average_speed FROM marvels
+GROUP BY hometown
+HAVING average_speed > 4;
+
+-- group the hometowns based on slow, normal, and fast speed levels.   
+Select hometown, speed,
+CASE
+WHEN speed < 3 THEN "slow"
+WHEN speed <7 THEN "normal"
+ELSE "fast"
+END as "speedsters"
+FROM marvels;
+
+-- what is the total count in each of categories? 
+SELECT COUNT(*),
+CASE
+WHEN speed < 3 THEN "slow"
+WHEN speed <7 THEN "normal"
+ELSE "fast"
+END as "speedsters"
+FROM marvels
+GROUP BY speedsters;
+
+-- which characters have an intelligence greater than 4 and popularity greater than 5? 
+SELECT * FROM marvels where intelligence >4 AND speed >5 AND popularity > 10;
+
+-- which characters have durability greater than 7 and fighting skills greater than 3?
+SELECT * FROM marvels WHERE durability >7 AND fighting_skills >3;
+
+-- which characters have either popularity greater than 15 or speed less than 8? 
+SELECT * FROM marvels WHERE popularity >15 OR strength > 8 OR speed <8;
+
