@@ -1,0 +1,89 @@
+# In this project, I created 3 separate tables with data about actors and the movies they worked on. I then used this data to perform data analytics and answer a series of questions. 
+
+CREATE TABLE famous_people 
+(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);
+
+ INSERT INTO famous_people (name) VALUES ("Jennifer Lawrence");
+ INSERT INTO famous_people (name) VALUES ("Tom Hiddleston");
+ INSERT INTO famous_people (name) VALUES ("Daniel Radcliffe");
+ INSERT INTO famous_people (name) VALUES ("Johnny Depp");
+ INSERT INTO famous_people (name) VALUES ("Scarlett Johanson");
+ INSERT INTO famous_people (name) VALUES ("Samuel L Jackson");
+ INSERT INTO famous_people (name) VALUES ("Tom Hanks");
+ INSERT INTO famous_people (name) VALUES ("Anna Kendrick");
+ INSERT INTO famous_people (name) VALUES ("Anne Hathway");
+ INSERT INTO famous_people (name) VALUES ("Josh Hutcherson");
+ INSERT INTO famous_people (name) VALUES ("Julie Andrews");
+ 
+ CREATE TABLE movies
+ (id INTEGER PRIMARY KEY AUTOINCREMENT, person_id INTEGER, title TEXT, genre TEXT, year_released TEXT);
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("1", "The Hunger Games", "action", "2012");
+  INSERT INTO movies (person_id, title, genre, year_released) VALUES ("10", "The Hunger Games", "action", "2012");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("9", "The Princess Diaries", "romcom", "2001");
+  INSERT INTO movies (person_id, title, genre, year_released) VALUES ("11", "The Princess Diaries", "romcom", "2001");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("3", "Harry Potter and the Sorceror's Stone", "fantasy", "2001");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("4", "Pirates of the Carribean", "action", "2003");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("8", "Pitch Perfect", "musical", "2012");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("2", "The Avengers", "action", "2012");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("6", "The Avengers", "action", "2012");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("7", "The Polar Express", "children's", "2004");
+  INSERT INTO movies (person_id, title, genre, year_released) VALUES ("10", "The Polar Express", "children's", "2004");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("7", "Toy Story", "children's", "1995");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("7", "Forest Gump", "romcom", "1994");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("4", "Charlie and the Chocolate Factory", "children's", "2005");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("3", "The Woman in Black", "horror", "2012");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("11", "The Sound of Music", "musical", "1965");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("11", "Dispicable Me", "children's", "2010");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("6", "Jurassic Park", "sci-fi", "1993");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("6", "The Incredibles", "children's", "2004");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("10", "Bridge to Terabithia", "fantasy", "2007");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("10", "Zathura: A Space Adventure", "sci-fi", "2005");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("5", "Lucy", "action", "2014");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("5", "Black Widow", "action", "2021");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("1", "House at the End of the Street", "horror", "2012");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("9", "Alice Through the Looking Glass", "fantasy", "2016");
+ INSERT INTO movies (person_id, title, genre, year_released) VALUES ("4", "Alice Through the Looking Glass", "fantasy", "2016");
+ 
+ CREATE TABLE costars
+ (id INTEGER PRIMARY KEY, person1_id INTEGER, person2_id INTEGER);
+ 
+ INSERT into costars (person1_id, person2_id) VALUES ("9", "4");
+ INSERT into costars (person1_id, person2_id) VALUES ("1", "10");
+ INSERT into costars (person1_id, person2_id) VALUES ("9", "11");
+ INSERT into costars (person1_id, person2_id) VALUES ("2", "6");
+ INSERT into costars (person1_id, person2_id) VALUES ("7", "10");
+ 
+ -- which actors/actresses were in which movies? 
+ SELECT famous_people.name, movies.title, movies.genre, movies.year_released
+ FROM famous_people
+ JOIN movies
+ ON famous_people.id = movies.person_id
+ ORDER BY year_released desc;
+ 
+ -- which movies were horror movies?
+ SELECT title FROM movies where genre = "horror";
+ 
+ -- which actors/actresses were costars?
+ SELECT a.name, b.name FROM costars
+ JOIN famous_people a
+ ON a.id = costars.person1_id
+ JOIN famous_people b
+ ON b.id = costars.person2_id;
+ 
+ -- which movies were released before the 2000s?
+SELECT title FROM movies where year_released < 2000;
+
+-- which movies were released after 2010 or is an action movie? 
+SELECT title FROM movies where year_released > 2010 OR genre = "action";
+
+-- which actors/actresses starred in the movie The Hunger Games?
+SELECT famous_people.name, movies.title
+FROM famous_people
+JOIN movies
+ON famous_people.id = movies.person_id
+WHERE movies.title = "The Hunger Games";
+
+-- which 3 movies were the newest to be released? 
+SELECT title, year_released from movies 
+ORDER BY year_released desc
+limit 3
