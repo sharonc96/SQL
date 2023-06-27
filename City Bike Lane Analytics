@@ -1,0 +1,9 @@
+-- Here I calculated all the lanes with a safety rating above 4.0 then listed the average for each of these lanes and labeled them as a 'Safe Lane'. 
+WITH average_safety_CTE AS (
+SELECT street, AVG(safetyrating) AS 'rating'
+FROM citybikelanes 
+GROUP BY street)
+
+SELECT street, rating, 'Safe Lane' AS 'label'
+FROM average_safety_CTE
+WHERE rating >=4;
