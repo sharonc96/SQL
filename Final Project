@@ -1,0 +1,53 @@
+1. Show Customers (their full names, customer ID, and country) who are not in the US. (Hint: != or <> can be used to say "is not equal to").
+SELECT Customerid, Firstname, Lastname, Country FROM customers
+WHERE country != 'USA';
+
+2. Show only the Customers from Brazil.
+SELECT * FROM customers
+WHERE country = 'Brazil';
+
+3. Find the Invoices of customers who are from Brazil. The resulting table should show the customer's full name, Invoice ID, Date of the invoice, and billing country.
+SELECT Firstname, Lastname, InvoiceID, Invoicedate, Billingcountry FROM customers
+JOIN invoices
+ON invoices.customerid = customers.customerid
+WHERE country = 'Brazil';
+
+4. Show the Employees who are Sales Agents.
+SELECT Firstname, Lastname, title FROM EMPLOYEES
+WHERE title = 'Sales Support Agent';
+
+5. Find a unique/distinct list of billing countries from the Invoice table.
+SELECT DISTINCT BillingCountry FROM INVOICES;
+
+6. Provide a query that shows the invoices associated with each sales agent. The resulting table should include the Sales Agent's full name.
+SELECT employees.Firstname, employees.Lastname, invoices.invoiceid
+FROM employees
+JOIN customers ON customers.supportrepid = employees.employeeid
+JOIN invoices ON customers.CustomerId = invoices.customerid;
+
+7. Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers.
+SELECT c.firstname, c.lastname, c.country, e.firstname, e.lastname, i.total
+FROM customers c 
+JOIN employees e ON e.EmployeeId = c.supportrepid
+JOIN invoices i ON i.customerid = c.customerid;
+
+8. How many Invoices were there in 2009?
+SELECT COUNT(*) FROM INVOICES
+WHERE INVOICEDATE LIKE '2009%';
+
+9. What are the total sales for 2009?
+SELECT SUM(total)FROM INVOICES 
+WHERE INVOICEDATE LIKE '2009%';
+
+10. Write a query that includes the purchased track name with each invoice line ID.
+SELECT t.name, i.invoicelineid FROM tracks t
+JOIN invoice_items i 
+ON i.TrackId = t.trackid;
+
+11. Write a query that includes the purchased track name AND artist name with each invoice line ID.
+SELECT t.name as track, a.name as artist, i.invoicelineid FROM tracks t
+JOIN invoice_items i ON i.TrackId = t.trackid
+JOIN albums ON albums.albumid = t.albumid
+JOIN artists a ON a.artistid = albums.artistid;
+
+12. 
