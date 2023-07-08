@@ -50,4 +50,28 @@ JOIN invoice_items i ON i.TrackId = t.trackid
 JOIN albums ON albums.albumid = t.albumid
 JOIN artists a ON a.artistid = albums.artistid;
 
-12. 
+12. Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre.
+SELECT t.name as track, a.title as album, m.name as media, g.name as genre
+FROM tracks t 
+JOIN albums a ON a.albumid = t.AlbumId
+JOIN media_types m ON m.MediaTypeId = t.MediaTypeId
+JOIN genres g ON g.GenreId = t.GenreId;
+
+13. Show the total sales made by each sales agent.
+SELECT e.firstname, e.lastname,
+ROUND(SUM(I.Total), 2) as 'Total Sales' 
+FROM employees e 
+JOIN customers c ON c.SupportRepId = e.EmployeeId
+JOIN Invoices i ON i.CustomerId = c.CustomerId
+GROUP BY e.EmployeeId;
+
+14. Which sales agent made the most dollars in sales in 2009?
+SELECT e.firstname, e.lastname,
+ROUND(SUM(I.Total), 2) as 'Total Sales' 
+FROM employees e 
+JOIN customers c ON c.SupportRepId = e.EmployeeId
+JOIN Invoices i ON i.CustomerId = c.CustomerId
+WHERE i.InvoiceDate LIKE '2009%'
+AND e.title = 'Sales Support Agent'
+GROUP BY e.EmployeeId
+ORDER BY ROUND(SUM(I.Total), 2) desc LIMIT 1;
