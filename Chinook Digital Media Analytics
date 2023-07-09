@@ -75,3 +75,24 @@ WHERE i.InvoiceDate LIKE '2009%'
 AND e.title = 'Sales Support Agent'
 GROUP BY e.EmployeeId
 ORDER BY ROUND(SUM(I.Total), 2) desc LIMIT 1;
+
+15. What were the total sales for each year? 
+SELECT ROUND(SUM(total), 2) as Total,
+CASE 
+WHEN invoicedate LIKE '2009%' THEN '2009'
+WHEN invoicedate LIKE '2010%' THEN '2010'
+WHEN invoicedate LIKE '2011%' THEN '2011'
+WHEN invoicedate LIKE '2012%' THEN '2012'
+WHEN invoicedate LIKE '2013%' THEN '2013'
+END AS YEAR
+FROM invoices
+GROUP BY Year;
+
+16. Which Country had the biggest number of total sales?
+SELECT c.country FROM customers c
+JOIN invoices i ON i.customerid = c.CustomerId
+GROUP BY c.country
+ORDER BY ROUND(SUM(i.total),2) desc LIMIT 1;
+
+17. 
+
