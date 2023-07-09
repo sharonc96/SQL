@@ -94,5 +94,25 @@ JOIN invoices i ON i.customerid = c.CustomerId
 GROUP BY c.country
 ORDER BY ROUND(SUM(i.total),2) desc LIMIT 1;
 
-17. 
+17. Which playlists include the track Snowballed? Show the playlist id number in results. 
+SELECT p.name, p.PlaylistId FROM tracks t
+JOIN playlist_track pt ON pt.trackid = t.TrackId
+JOIN playlists p ON p.PlaylistId = pt.PlaylistId
+WHERE t.name = 'Snowballed';
+
+18. What are the top 5 longest songs?
+SELECT name from tracks 
+ORDER BY milliseconds desc limit 5;
+
+19. List all the employees and job titles in order of hire date from oldest to newest. 
+SELECT firstname, lastname, title from employees
+ORDER BY hiredate asc;
+
+20. How many tracks total are in each genre? 
+SELECT g.name as genre, COUNT(t.genreid) as total
+FROM tracks t 
+JOIN genres g 
+ON g.GenreId = t.genreid
+GROUP BY g.name;
+
 
