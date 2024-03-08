@@ -1,1 +1,23 @@
-C
+1. I created a code to calculate the minimum, maximum, standard deviation, and average revenue of each product in 2022. 
+
+WITH revenue_cte AS (
+SELECT 
+    date_trunc('month', s.ORDERDATE) as ordermonth,
+    p.productname,
+    sum(s.revenue) as revenue,
+FROM subscriptions s
+JOIN products p
+ON s.PRODUCTID = p.PRODUCTID
+WHERE s.ORDERDATE BETWEEN '2022-01-01' AND '2022-12-31'
+GROUP BY p.PRODUCTNAME, date_trunc('month', s.ORDERDATE))
+
+SELECT 
+productname,
+MIN (revenue) AS min_rev,
+MAX(revenue) AS max_rev,
+AVG(revenue) AS AVG_rev,
+STDDEV(revenue) AS std_dev_rev,
+FROM revenue_cte
+GROUP BY productname;
+
+2. 
