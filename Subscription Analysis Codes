@@ -20,4 +20,102 @@ STDDEV(revenue) AS std_dev_rev,
 FROM revenue_cte
 GROUP BY productname;
 
-2. 
+2. This code I created is with the scenario of finding the number of users who clicked a linked from the campaign emails sent where that specific method has a unique id. 
+
+WITH num_users_cte AS (
+SELECT 
+    userid,
+    COUNT(*) as num_link_clicks
+FROM frontendeventlog
+WHERE 
+    eventid = 5
+GROUP BY userid
+)
+
+SELECT 
+COUNT(*) as num_users,
+num_link_clicks
+FROM num_users_cte
+GROUP BY num_link_clicks;
+
+
+3. This code I created is used to calculate the number of users who stop at each part of the payment process. The code also allows us to calculate whether the user stop is due to user error or vendor error during the payment submission and processing stages. 
+
+WITH maxstatus_cte AS (
+	SELECT 
+		MAX(statusid) as maxstatus, subscriptionid
+	FROM
+		paymentstatuslog
+	GROUP BY 
+		subscriptionid),
+subscription_cte AS (
+	SELECT s.subscriptionid,
+		case when maxstatus = 1 then 'PaymentWidgetOpened'
+		when maxstatus = 2 then 'PaymentEntered'
+		when maxstatus = 3 and currentstatus = 0 then 'User Error with Payment Submission'
+		when maxstatus = 3 and currentstatus != 0 then 'Payment Submitted'
+		when maxstatus = 4 and currentstatus = 0 then 'Payment Processing Error with Vendor'
+		when maxstatus = 4 and currentstatus != 0 then 'Payment Success'
+		when maxstatus = 5 then 'Complete'
+		when maxstatus is null then 'User did not start payment process'
+		end as paymentfunnelstage
+	FROM subscriptions s
+	LEFT JOIN maxstatus_cte 
+	ON s.subscriptionid = maxstatus_cte.subscriptionid)
+
+SELECT 
+	COUNT(subscriptionid) as subscriptions, paymentfunnelstage
+FROM  
+	subscription_cte
+GROUP BY 
+	paymentfunnelstage
+
+4. This code I created was for a scenario where a company wants to add a product on top of a subscrition which could increase the customer annual fee. The company wants to reach out to a smaller group to get feedback, the code pulls users according to the specific conditions. 
+
+SELECT
+    customerid, COUNT(productid) as num_products, SUM(NUMBEROFUSERS) as total_users,
+    case when SUM(NUMBEROFUSERS) > 5000 OR COUNT(productid) = 1 THEN 1
+        ELSE 0
+    end as upsell_opportunity
+FROM
+    subscriptions
+GROUP BY 
+    customerid;
+
+5. This code is used to track the number of times a user completes each event on a customer support page. 
+
+SELECT 
+    userid,  
+    SUM(CASE when fd.eventid = 1 THEN 1 ELSE 0 end) as ViewedHelpCenterPage,
+    SUM(CASE when fd.eventid = 2 THEN 1 ELSE 0 end) as ClickedFAQs,
+    SUM(CASE when fd.eventid = 3 THEN 1 ELSE 0 end) as ClickedContactSupport,
+    SUM(CASE when fd.eventid = 4 THEN 1 ELSE 0 end) as SubmittedTicket
+FROM
+    frontendeventlog fl
+JOIN frontendeventdefinitions fd
+ON fl.eventid = fd.EVENTID
+WHERE eventtype = 'Customer Support'
+GROUP BY 
+    userid
+
+6. This code I created is used to count the number of active subscriptions that will expire in each year for each products. The products were in different tables so they needed to be joined. 
+
+With all_subscriptions as(
+SELECT 
+	*
+FROM
+	subscriptionsproduct1
+UNION 
+SELECT 
+	*
+FROM
+	subscriptionsproduct2
+)
+select
+	date_trunc('year', expirationdate) as exp_year, 
+	count(*) as subscriptions
+from 
+	all_subscriptions
+WHERE active = 1
+group by 
+	date_trunc('year', expirationdate)
